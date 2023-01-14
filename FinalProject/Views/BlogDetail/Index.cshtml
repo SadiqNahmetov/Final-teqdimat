@@ -1,0 +1,185 @@
+﻿@model BlogDetailVM
+@{
+    ViewData["Title"] = "Blog detail";
+}
+
+@section Css
+{
+    <link rel="shortcut icon" href="https://img.icons8.com/office/512/online-store.png" type="image/x-icon">
+   
+    <link rel="stylesheet" href="~/assets/css/blog-detail/blog-detail.css">
+
+}
+
+
+<main>
+    <a href="" class="angleUp">
+        <i class="fa-solid fa-angles-up"></i>
+    </a>
+    <section id="blog-detail-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="title">
+                        <h2>Blog detail</h2>
+                    </div>
+                </div>
+                <div class="col-lg-8 col-md-8 col-sm-12">
+                    <div class="blog-card">
+                        <div class="blog-img">
+                            <a>
+                                <div class="blogD-image">
+                                    <img src="~/assets/img/blog/@Model.Blog.Image" alt="">
+
+                                </div>
+
+                            </a>
+                        </div>
+                        <div class="blog-text-main">
+                            <div class="blog-text">
+                                <h3>@Model.Blog.Title</h3>
+                                <p>
+                                    @Model.Blog.Description
+                                </p>
+                                <div class="tag">
+                                    <span class="head">Tags :</span>
+                                    <div class="tag-name">
+                                        @foreach (var tag in Model.Tags)
+                                        {
+                                            <a href="">@tag.Name</a>
+
+                                        }
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="blog-card">
+
+
+                        @foreach (var blogComment in Model.BlogComments)
+                        {
+                            <h5>Commemt area</h5>
+
+
+                            <div style="border: 0.3px solid #e1d6eb " class="comment-area" id="@blogComment.Id">
+                                <p>
+                                    @blogComment.Content
+
+                                </p>
+
+                                <div class="comment">
+                                    <div class="name-date">
+                                        <h4><a href="">@blogComment.AppUser.Fullname</a></h4>
+                                        <p>@blogComment.CreateDate.ToString("MM-dd-yyyy HH:mm")</p>
+                                    </div>
+                                    <form asp-controller="BlogDetail" asp-action="DeleteComment" asp-route-id="@blogComment.Id" method="post">
+                                        <button id="deleteBtn" style="margin-right: 10px !important; margin-top:-7px !important" type="submit" class="btn btn-danger">Delete</button>
+                                    </form>
+                                </div>
+                            </div>
+
+                        }
+
+                    </div>
+
+
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <div class="contact-area-main">
+                            <div class="contact-address">
+                                <div class="row">
+                                    <h2>Leave a Reply</h2>
+                                    <div class="col-md-8">
+                                        <div class="contact-address-left">
+                                            <form class="comments-form contact-form" asp-controller="BlogDetail" asp-action="CreateComment" method="post">
+                                                <div class="row">
+                                                    <div class="form-group">
+                                                            <textarea asp-for="@Model.BlogComment.Content" class="form-control" placeholder="Write Comment"></textarea>
+                                                            <input asp-for="@Model.BlogComment.BlogId" type="hidden" class="blog-id" value="@Model.Blog.Id" />
+                                                            <button type="submit" class="btn btn-success my-3">Submit</button>
+                                                    </div>
+
+                                                </div>
+
+                                            </form>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                </div>
+
+                <div class="col-lg-4 col-md-4 col-sm-12">
+                    <div class="row">
+
+                        <div class="col-12">
+                            <div class="category">
+                                <h3>Category</h3>
+                                @foreach (var blogcategory in Model.BlogCategories)
+                                {
+                                    <li>
+                                        <a href="">@blogcategory.Name</a>
+                                    </li>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="recent-post">
+                                <h3>Recent Post</h3>
+
+                                <div class="recent-card">
+
+                                    @foreach (var recentpost in Model.RecentPosts)
+                                    {
+                                        <div class="img-name">
+                                            <a asp-controller="Blog" asp-action="Index" asp-route-id="@recentpost.Id">
+                                                <img style="width:120px; height:100px;" src="~/assets/img/blog/@recentpost.Image" alt="image">
+                                            </a>
+                                            <div class="name-blog">
+                                                <h6>@recentpost.Title</h6>
+
+                                                <p>@recentpost.CreateDate.ToString("dd MMMM yyyy")</p>
+                                            </div>
+                                        </div>
+                                    }
+
+
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </section>
+
+</main>
+
+@section Scripts
+{
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"
+            integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script src="https://kit.fontawesome.com/0622708fc2.js" crossorigin="anonymous"></script>
+
+    <script src="~/assets/js/blog-detail/blog-detail.js"></script>
+
+
+
+}

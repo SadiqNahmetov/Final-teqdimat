@@ -1,0 +1,136 @@
+﻿@model ContactVM
+
+@{
+    ViewData["Title"] = "Contact";
+}
+
+
+@section Css
+{
+    <link rel="shortcut icon" href="https://img.icons8.com/office/512/online-store.png" type="image/x-icon">
+    
+    <link rel="stylesheet" href="~/assets/css/contact/contact.css">
+
+
+}
+
+
+
+<main>
+    <a href="" class="angleUp">
+        <i class="fa-solid fa-angles-up"></i>
+    </a>
+    <section id="product-mapp">
+        <div class="container">
+            <div class="row" style="margin-right: 0;">
+                <div class="col-12">
+                    <iframe src="@Model.Map.Url"
+                            width="100%" height="400" style="overflow-y: none;"
+                            style="border: 0; filter: brightness(0.1)" allowfullscreen="" loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+
+    <section id="contact-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="contact-area-main">
+                        <div class="aa-contact-address">
+                            <div class="row">
+                                <h2>Get in Touch</h2>
+
+                                <div class="col-md-8">
+                                    <div class="aa-contact-address-left">
+                                        <form class="comments-form contact-form" asp-controller="Contact" asp-action="Index" method="post">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <input type="text" placeholder="Your Name" class="form-control" asp-for="SendMessage.Name">
+                                                        <span class="text-danger my-2" asp-validation-for="SendMessage.Name"> </span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+
+                                                        <input type="text" placeholder="Your Surname" class="form-control" asp-for="SendMessage.Surname">
+                                                        <span class="text-danger my-2" asp-validation-for="SendMessage.Surname"> </span>
+
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <input type="text" placeholder="Subject" class="form-control" asp-for="SendMessage.Subject">
+                                                        <span class="text-danger my-2" asp-validation-for="SendMessage.Subject"> </span>
+
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <input type="email" placeholder="Email" class="form-control" asp-for="SendMessage.Email">
+                                                        <span class="text-danger my-2" asp-validation-for="SendMessage.Email"> </span>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <textarea class="form-control" rows="3" placeholder="Message" asp-for="SendMessage.Message"></textarea>
+                                                <span class="text-danger my-2" asp-validation-for="SendMessage.Message"> </span>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="aa-contact-address-right">
+                                        <address>
+                                            <h4>@Model.Contact.Title</h4>
+                                            <p>
+                                                @Model.Contact.Description
+                                            </p>
+                                            <p>@Html.Raw(Model.Contact.Address)</p>
+                                            <p>@Html.Raw(Model.Contact.Phone)</p>
+                                            <a href="">@Html.Raw(Model.Contact.Email)</a>
+                                        </address>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    @await Component.InvokeAsync("InstagramPhoto")
+
+
+
+
+</main>
+
+@section Scripts
+{
+    <partial name="_ValidationPartial" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"
+            integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
+
+
+
+    <script src="https://kit.fontawesome.com/0622708fc2.js" crossorigin="anonymous"></script>
+
+    <script src="~/assets/js/contact/contact.js"></script>
+
+
+}

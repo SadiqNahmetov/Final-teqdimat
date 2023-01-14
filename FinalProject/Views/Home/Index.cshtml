@@ -1,0 +1,187 @@
+﻿@model HomeVM
+
+@{
+    ViewData["Title"] = "Home";
+}
+
+
+
+<!-- Start Main Area -->
+<main>
+    <a href="" class="angleUp">
+        <i class="fa-solid fa-angles-up"></i>
+    </a>
+    <section id="slider-img">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    <div class="swiper mySwiperSl">
+                        <div class="swiper-wrapper">
+                            @foreach (var slider in Model.Sliders)
+                            {
+                                <div class="swiper-slide">
+
+                                    <div class="img">
+                                        <img src="~/assets/img/slider/@slider.Image" alt="slider" />
+                                    </div>
+                                    <div class="slider-text">
+                                        <p>@slider.Title</p>
+                                        <h1>@Html.Raw(slider.Descirption)</h1>
+                                        <a href="">Shop Now</a>
+                                    </div>
+                                </div>
+
+                            }
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="service">
+        <div class="container">
+            <div class="row">
+                @foreach (var service in Model.Services)
+                {
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+
+                        <div class="cards">
+                            <img src="~/assets/img/service/@service.Image" alt="icon">
+                            <h3>@service.Title</h3>
+                            <p>@service.Description</p>
+                        </div>
+                    </div>
+
+                }
+
+
+            </div>
+        </div>
+    </section>
+
+    <section id="feature-part">
+        <div class="container">
+            <div class="row">
+                @foreach (var feature in Model.Features)
+                {
+                    <div class="col-lg-4 col-md-12 col-sm-12">
+                        <div class="card mb-2">
+                            <div class="img">
+                                <img src="~/assets/img/product/@feature.Image" alt="images">
+                            </div>
+
+                            <div class="text">
+                                <a asp-controller="Shop" asp-action="Index">Buy Now</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+            </div>
+        </div>
+    </section>
+
+
+    <section id="slider-product-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="title-ourPr">
+                        <h3>Our Product</h3>
+                    </div>
+                </div>
+                <div class="swiper mySwiper1">
+                    <div class="swiper-wrapper">
+                        @foreach (var product in Model.Products)
+                        {
+                            <div class="swiper-slide">
+                                <div class="card-pr" cart-id="@product.Id">
+                                    <input type="hidden" class="product-id" value="@product.Id" />
+                                    <div class="imagesBx">
+
+                                        <img src="~/assets/img/product/@product.ProductImages.FirstOrDefault(m => m.IsMain)?.Image" alt="images">
+
+                                        <ul class="icon-shop">
+                                            <li>
+                                                <i class="fa fa-heart wishList"></i>
+                                                <span>Add to WishList</span>
+                                            </li>
+                                            @if (User.Identity.IsAuthenticated)
+                                            {
+                                                <li>
+                                                    <a cart-id="@product.Id" id="addToCart"><i class="fa-sharp fa-solid fa-bag-shopping"></i></a>
+                                                    <span>Add to Cart</span>
+
+                                                </li>
+                                            }
+                                            else
+                                            {
+                                                <li>
+                                                    <a asp-controller="Account" asp-action="Login" cart-id="@product.Id" id="addToCart"><i class="fa-sharp fa-solid fa-bag-shopping"></i></a>
+                                                    <span>Add to Cart</span>
+
+                                                </li>
+                                            }
+
+
+                                            <a class="detail" asp-controller="ProductDetail" asp-action="Index" asp-route-id="@product.Id">
+                                            <li>
+                                                <i class="fa fa-eye"></i>
+                                                <span>View Details</span>
+                                            </li>
+                                            </a>
+
+                                        </ul>
+                                    </div>
+
+                                    <div class="productName">
+                                        <h4>@product.Brand.Name</h4>
+                                        <a href="">@product.Name</a>
+                                    </div>
+                                    <div class="price">
+                                        <span>@((product.Price-((product.Price*product.DiscountPrice)/100)).ToString("##.00"))₼</span>
+                                        <span><del>@product.Price.ToString("##.00")₼</del></span>
+                                    </div>
+
+                                </div>
+                            </div>
+                        }
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+
+
+    @await Component.InvokeAsync("InstagramPhoto")
+
+
+    <section id="brand-area">
+        <div class="container">
+            <h3>OUR BRANDS</h3>
+            <div class="swiper mySwiperbrand">
+                <div class="swiper-wrapper">
+                    @foreach (var barnd in Model.Brands)
+                    {
+                        <div class="swiper-slide">
+                            <img src="~/assets/img/brand/@barnd.Image" alt="brand-image">
+                        </div>
+                    }
+
+
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+</main>
+<!-- end Main Area -->

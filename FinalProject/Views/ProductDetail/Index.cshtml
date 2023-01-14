@@ -1,0 +1,242 @@
+﻿@model ProductDetailVM
+@{
+    ViewData["Title"] = "Index";
+}
+
+@{
+
+    int count = 0;
+}
+
+@section Css{
+    <link rel="shortcut icon" href="https://img.icons8.com/office/512/online-store.png" type="image/x-icon">
+   
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo+Narrow&display=swap"
+          rel="stylesheet">
+    <!--FONT AWESOME-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.css"
+          integrity="sha512-wR4oNhLBHf7smjy0K4oqzdWumd+r5/+6QO/vDda76MW5iug4PT7v86FoEkySIJft3XA0Ae6axhIvHrqwm793Nw=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="stylesheet" href="~/assets/css/product-detail/product-detail.css">
+}
+
+
+<main>
+    <a href="" class="angleUp">
+        <i class="fa-solid fa-angles-up"></i>
+    </a>
+    <section id="product-detail">
+        <div class="container">
+            <div class="row">
+                <div class="card-wrapper">
+                    <div class="card">
+                        <div class="product-imgs">
+                            <div class="img-display">
+                                <div class="img-showcase">
+                                    @foreach (var img in Model.Product.ProductImages)
+                                    {
+                                        <img src="~/assets/img/product/@img.Image" alt="image">
+
+                                    }
+
+
+                                </div>
+                            </div>
+                            <div class="img-select">
+                                @foreach (var img in Model.Product.ProductImages)
+                                {
+                                    count++;
+                                    <div class="img-item">
+                                        <a href="#" data-id="@count">
+                                            <img src="~/assets/img/product/@img.Image " alt="image">
+                                        </a>
+                                    </div>
+                                }
+
+
+                            </div>
+                        </div>
+                        <div class="product-content" cart-id="@Model.Product.Id">
+                            <input type="hidden" class="product-id" value="@Model.Product.Id" />
+                            <h2 class="product-title">@Html.Raw(Model.Product.Name)</h2>
+
+                            <div class="product-price">
+                                <span><del style="font-size: 14px;">@Model.Product.Price.ToString("##.00") ₼</del></span>
+                                <span style="color: red;">
+                                    @((Model.Product.Price-((Model.Product.Price*Model.Product
+                                                            .DiscountPrice)/100)).ToString("##.00")) ₼
+                                </span>
+
+                            </div>
+
+                            <div class="about-product">
+                                <p>
+                                    @Html.Raw(Model.Product.Description.Substring(0, 150))
+                                </p>
+
+                                <ul>
+
+                                    <li>Category : <span>@Model.Product.Category.Name</span></li>
+
+                                    <li>Brand : <span>@Model.Product.Brand.Name</span></li>
+
+                                </ul>
+
+
+                                <div class="select-option">
+                                    <form action="/action_page.php">
+                                        <label for="sizes">Choose size:</label>
+                                        <select name="sizes" class="size">
+                                            <option value="size">Select Size</option>
+                                            @foreach (var sizes in Model.Product.ProductSizes)
+                                            {
+                                                if (sizes.ProductId == Model.Product.Id)
+                                                {
+                                                    <option value="size">@sizes.Size.SizeType</option>
+                                                }
+
+                                            }
+
+
+
+                                        </select>
+                                    </form>
+                                </div>
+                            </div>
+
+
+
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <div class="purchase-info">
+                                    <button type="button" class="my-btn" cart-id="@Model.Product.Id" id="addToCart">
+                                        Add to Cart <i class="fas fa-shopping-cart"></i>
+                                    </button>
+                                </div>
+
+                            }
+                            else
+                            {
+                                <div class="purchase-info">
+                                    <a style="text-decoration:none;" asp-controller="Account" asp-action="Login">
+                                        <button  type="button" class="my-btn" cart-id="@Model.Product.Id" id="addToCart">
+                                            Add to Cart <i class="fas fa-shopping-cart"></i>
+                                        </button>
+                                    </a>
+                                </div>
+
+                            }
+
+                        </div>
+
+
+
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </section>
+
+
+
+    <section id="product-detail-description">
+        <div class="product_container">
+            <div class="reviews inline-photo show-on-scroll">
+                <div class="review_sidebar review_bar_block review_gray review_card">
+                    <button class="review-bar-item review-button tablink btn4 active_button"
+                            onclick="opentab_type(event, 'Description')">
+                        Description
+                    </button>
+                    <button class="review-bar-item review-button tablink btn4"
+                            onclick="opentab_type(event, 'User_reviews')">
+                        Reviews
+                    </button>
+                </div>
+                <div>
+                    <div id="Description" class="review_container tab_type">
+                        <h2>Description</h2>
+                        <p>
+                            @Html.Raw(Model.Product.Description)
+                        </p>
+
+                    </div>
+                    <div id="User_reviews" class="review_container tab_type" style="display:none">
+                        <div class="user_star_ratings">
+
+                            @foreach (var comment in Model.DbComments)
+                            {
+                                <ul class="product-comment" id="@comment.Id">
+                                    <div style="width: 450px;  background-color: white;" class="coment-main">
+                                    <li style="margin-left:10px !important">
+                                        <b>@comment.AppUser.Fullname</b>
+                                        <span>@comment.CreateDate.ToString("MM-dd-yyyy HH:mm")</span>
+
+                                        <p>
+                                            @comment.Content
+                                        </p>
+
+                                    </li>
+                                    <form asp-controller="ProductDetail" asp-action="DeleteComment" asp-route-id="@comment.Id" method="post">
+                                        <button id="deleteBtn" style="margin-left: 82% !important; margin-top:-35px !important" type="submit" class="btn btn-danger">Delete</button>
+                                    </form>
+                            </div>
+                            </ul>
+                        }
+
+
+
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <div class="enter_user_comment">
+                                    <h1 class="title">Add your review</h1>
+                                    <form asp-controller="ProductDetail" asp-action="CreateComment" method="post">
+                                        <textarea asp-for="@Model.Comment.Content" placeholder="Write a review" required></textarea>
+                                        <input asp-for="@Model.Comment.ProductId" type="hidden" class="product-id" value="@Model.Product.Id" />
+                                        <button type="submit" class="btn2">SUBMIT</button>
+                                    </form>
+                                </div>
+                            }
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+
+
+    @section Scripts{
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.4.30/sweetalert2.all.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
+
+     
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"
+                integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA=="
+                crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+        <script src="https://kit.fontawesome.com/0622708fc2.js" crossorigin="anonymous"></script>
+
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"
+                integrity="sha512-XtmMtDEcNz2j7ekrtHvOVR4iwwaD6o/FUJe6+Zq+HgcCsk3kj4uSQQR8weQ2QVj1o0Pk6PwYLohm206ZzNfubg=="
+                crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+
+        <script src="~/assets/js/product-detail/product-detail.js"></script>
+    }
